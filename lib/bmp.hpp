@@ -28,4 +28,8 @@ private:
 public:
     virtual Image * LoadImage(const char * fileName);
     virtual bool SaveImage(const char * fileName);
+    virtual Image* Clone(bool clonePixels = false);
+
+    void SetHeight(uint16_t height) { Image::SetHeight(height); ImageDetails.Height = height; }
+    void SetWidth(uint16_t width)   { Image::SetWidth(width); ImageDetails.Width = width; }
 };

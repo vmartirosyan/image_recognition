@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <string.h>
 #include "bmp.hpp"
 
 Image * BMPImage::LoadImage(const char * fileName) {
@@ -26,13 +27,13 @@ Image * BMPImage::LoadImage(const char * fileName) {
     std::cout << "Tail loaded. Size: " << ImageDetails.HeaderSize - sizeof(ImageDetails) << std::endl;
     
     
-    this->Height = ImageDetails.Height;
-    this->Width = ImageDetails.Width;
-    this->BPP = 32; // ToDo: Implement support for multiple BPPs
+    this->height = ImageDetails.Height;
+    this->width = ImageDetails.Width;
+    this->bpp = 32; // ToDo: Implement support for multiple BPPs
 
-    this->Pixels = new Pixel[this->Height * this->Width];
-    MyFile.read((char*)this->Pixels, sizeof(Pixel) * ImageDetails.Width * ImageDetails.Height);
-    std::cout << "Pixels loaded. Size: " << this->Height * this->Width << std::endl;
+    this->pixels = new Pixel[this->height * this->width];
+    MyFile.read((char*)this->pixels, sizeof(Pixel) * ImageDetails.Width * ImageDetails.Height);
+    std::cout << "Pixels loaded. Size: " << this->height * this->width << std::endl;
 
     return this;
 }
@@ -42,9 +43,20 @@ bool BMPImage::SaveImage(const char * fileName) {
     Output.write((char*)&Header, sizeof(Header));
     Output.write((char*)&ImageDetails, sizeof(ImageDetails));
     Output.write((char*)Tail, ImageDetails.HeaderSize - sizeof(ImageDetails));
-    Output.write((char*)Pixels, sizeof(Pixel) * ImageDetails.Width * ImageDetails.Height);
+    Output.write((char*)pixels, sizeof(Pixel) * ImageDetails.Width * ImageDetails.Height);
     Output.close();
     return true;
 }
+
+Image* BMPImage::Clone(bool clonePixels) {
+    Image  * newImage = new BMPImage(*this);
+     if (clonePixels) {
+        newImage->SetPixels(new Pixel[height*width]);
+        memcpy(newImage->GetPixels(), this->pixels, height*width*sizeof(Pixel));
+     }
+
+     return newImage;
+}
+
 
 
