@@ -1,4 +1,4 @@
-FLAGS = -g -Wall -pedantic
+FLAGS = -g -Wall -pedantic -std=c++2a
 
 all: main.cpp bmp.cpp lib/lib.a
 		g++ $(FLAGS) bmp.cpp lib/lib.a -o main

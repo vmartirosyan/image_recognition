@@ -1,6 +1,7 @@
 #include "image.hpp"
 #include <iostream>
 #include <vector>
+#include <map>
 #include <stdlib.h>
 
 Image* Image::Invert() {
@@ -32,7 +33,32 @@ std::vector<Image*> Image::Split(uint16_t numParts, SplitType type) {
         fileName += (char)(i+'0');
         fileName += ".bmp"; 
         img->SaveImage(fileName.c_str());
+        images.push_back(img);
     }
 
     return images;
-} 
+}
+
+RGBA Image::GetAverageColor() {
+    std::map<RGBA, unsigned int> colorMap;
+    
+    RGBA avgColor;
+    for (int i = 0; i < height * width; ++i) {
+        uint count = colorMap[pixels[i].RGBA];
+        //std::pair<RGBA, unsigned int> pair(pixels[i].RGBA, count+1);
+        colorMap[pixels[i].RGBA] = count+1;
+        // avgColor.R = (avgColor.R + (int)pixels[i].RGBA.R) / 2;
+        // avgColor.G = (avgColor.G + (int)pixels[i].RGBA.G) / 2;
+        // avgColor.B = (avgColor.B + (int)pixels[i].RGBA.B) / 2;
+    }
+
+    unsigned int max = 0;
+    for (auto i = colorMap.begin(); i != colorMap.end(); ++i) {
+        if (i->second > max) {
+            max = i->second;
+            avgColor = i->first;
+        }
+    }
+
+    return avgColor;
+}

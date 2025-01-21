@@ -1,16 +1,22 @@
 #include <stdint.h>
+#include <math.h>
 #include <vector>
+
+struct __attribute__((__packed__)) RGBA
+{
+    unsigned int B: 8;
+    unsigned int G: 8;
+    unsigned int R: 8;
+    unsigned int A: 8;
+    uint Distance(const RGBA & c) { return fabs(R-c.R) + fabs(G-c.G) + fabs(B-c.B); }
+    bool operator <  (const RGBA c) const { return (R<c.R)  || (G<c.G)  || (B<c.B); }
+    bool operator == (const RGBA c) const { return (R==c.R) && (G==c.G) && (B==c.B);}
+};
 
 union Pixel
 {
     uint32_t Value;
-    struct __attribute__((__packed__)) RGBA
-    {
-        unsigned int B: 8;
-        unsigned int G: 8;
-        unsigned int R: 8;
-        unsigned int A: 8;
-    } RGBA;
+    struct RGBA RGBA;
 };
 
 enum SplitType {
@@ -35,6 +41,7 @@ public:
 
     // Splits the image into cmaller parts of given number. Can split either horizontally, or vertically.
     virtual std::vector<Image*> Split(uint16_t numParts, SplitType type);
+    virtual RGBA GetAverageColor();
 
     virtual uint16_t    GetHeight()                 { return height;}
     virtual void        SetHeight(uint16_t value)   { height = value;}

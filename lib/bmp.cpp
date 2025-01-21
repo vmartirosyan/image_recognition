@@ -9,22 +9,22 @@ Image * BMPImage::LoadImage(const char * fileName) {
     std::ifstream MyFile(fileName);  
     MyFile.read((char*)&Header, sizeof(Header));
 
-    std::cout << "ID address: " << &Header.ID << std::endl;
-    std::cout << "File Size address: " << &Header.FileSize << std::endl;
+    // std::cout << "ID address: " << &Header.ID << std::endl;
+    // std::cout << "File Size address: " << &Header.FileSize << std::endl;
 
-    std::cout << "Id: " << Header.ID << std::endl;
-    std::cout << "File Size: " << Header.FileSize << std::endl;
-    std::cout << "Pixel offset: " << Header.PixelOffset << std::endl;
+    // std::cout << "Id: " << Header.ID << std::endl;
+    // std::cout << "File Size: " << Header.FileSize << std::endl;
+    // std::cout << "Pixel offset: " << Header.PixelOffset << std::endl;
 
     MyFile.read((char*)&ImageDetails, sizeof(ImageDetails));
 
-    std::cout << "DIB Header Size: " << ImageDetails.HeaderSize << std::endl;
-    std::cout << "Width: " << ImageDetails.Width << std::endl;
-    std::cout << "Height: " << ImageDetails.Height << std::endl;
+    // std::cout << "DIB Header Size: " << ImageDetails.HeaderSize << std::endl;
+    // std::cout << "Width: " << ImageDetails.Width << std::endl;
+    // std::cout << "Height: " << ImageDetails.Height << std::endl;
 
     Tail = new char[ImageDetails.HeaderSize - sizeof(ImageDetails)];
     MyFile.read((Tail), ImageDetails.HeaderSize - sizeof(ImageDetails));
-    std::cout << "Tail loaded. Size: " << ImageDetails.HeaderSize - sizeof(ImageDetails) << std::endl;
+    // std::cout << "Tail loaded. Size: " << ImageDetails.HeaderSize - sizeof(ImageDetails) << std::endl;
     
     
     this->height = ImageDetails.Height;
@@ -33,7 +33,7 @@ Image * BMPImage::LoadImage(const char * fileName) {
 
     this->pixels = new Pixel[this->height * this->width];
     MyFile.read((char*)this->pixels, sizeof(Pixel) * ImageDetails.Width * ImageDetails.Height);
-    std::cout << "Pixels loaded. Size: " << this->height * this->width << std::endl;
+    // std::cout << "Pixels loaded. Size: " << this->height * this->width << std::endl;
 
     return this;
 }
